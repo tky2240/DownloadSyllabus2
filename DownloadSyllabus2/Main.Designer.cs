@@ -58,6 +58,7 @@
             this.cmd_folderPath.TabIndex = 16;
             this.cmd_folderPath.Text = "DLフォルダパス";
             this.cmd_folderPath.UseVisualStyleBackColor = true;
+            this.cmd_folderPath.Click += new System.EventHandler(this.cmd_folderPath_Click);
             // 
             // cmd_NullPath
             // 
@@ -69,6 +70,7 @@
             this.cmd_NullPath.TabIndex = 15;
             this.cmd_NullPath.Text = "CSVパスなし";
             this.cmd_NullPath.UseVisualStyleBackColor = true;
+            this.cmd_NullPath.Click += new System.EventHandler(this.cmd_NullPath_Click);
             // 
             // lab_csvPath
             // 
@@ -90,6 +92,7 @@
             this.cmd_csvPath.TabIndex = 13;
             this.cmd_csvPath.Text = "CSVパス指定";
             this.cmd_csvPath.UseVisualStyleBackColor = true;
+            this.cmd_csvPath.Click += new System.EventHandler(this.cmd_csvPath_Click);
             // 
             // cmd_exit
             // 
@@ -101,6 +104,7 @@
             this.cmd_exit.TabIndex = 12;
             this.cmd_exit.Text = "終了";
             this.cmd_exit.UseVisualStyleBackColor = true;
+            this.cmd_exit.Click += new System.EventHandler(this.cmd_exit_Click);
             // 
             // cmd_download
             // 
@@ -112,6 +116,7 @@
             this.cmd_download.TabIndex = 11;
             this.cmd_download.Text = "DL開始";
             this.cmd_download.UseVisualStyleBackColor = true;
+            this.cmd_download.Click += new System.EventHandler(this.cmd_download_Click);
             // 
             // cmd_updtae
             // 
@@ -123,6 +128,7 @@
             this.cmd_updtae.TabIndex = 10;
             this.cmd_updtae.Text = "CSV更新";
             this.cmd_updtae.UseVisualStyleBackColor = true;
+            this.cmd_updtae.Click += new System.EventHandler(this.cmd_updtae_Click);
             // 
             // dgv_class
             // 
@@ -132,6 +138,8 @@
             this.dgv_class.RowTemplate.Height = 21;
             this.dgv_class.Size = new System.Drawing.Size(803, 426);
             this.dgv_class.TabIndex = 9;
+            this.dgv_class.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_class_CellContentClick);
+            this.dgv_class.DefaultValuesNeeded += new System.Windows.Forms.DataGridViewRowEventHandler(this.dgv_class_DefaultValuesNeeded);
             // 
             // Main
             // 

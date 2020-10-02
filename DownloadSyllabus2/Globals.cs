@@ -75,7 +75,7 @@ namespace DownloadSyllabus2 {
         string lpstring,
         string lpFileName);
 
-        public static string csvFilePath = "";
+        public static string csvPath = "";
         public static string folderPath = "";
     }
 }
