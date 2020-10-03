@@ -51,14 +51,14 @@ namespace DownloadSyllabus2 {
             }
             foreach(DataRow row in csvTable.Rows) {
                 if (!Search_Syllabus(row)) {
-                    MessageBox.Show($"次の行のシラバス取得に失敗しました。項目を見直してください。\n{row.ToString()}");
+                    MessageBox.Show($"次の行のシラバス取得に失敗しました。項目を見直してください。\n{row.ItemArray.ToString()}");
                     if (!Goto_SearchPage()) {
                         Terminate_Chrome();
                         return false;
                     }
                 }
                 if (!Download_and_Reference_Syllabus(row)) {
-                    MessageBox.Show($"次の行のシラバス取得に失敗しました。項目を見直してください。\n{row.ToString()}");
+                    MessageBox.Show($"次の行のシラバス取得に失敗しました。項目を見直してください。\n{row.ItemArray.ToString()}");
                     if (!Goto_SearchPage()) {
                         Terminate_Chrome();
                         return false;
@@ -82,11 +82,14 @@ namespace DownloadSyllabus2 {
                 return false;
             }
             Input_PW _PW = new Input_PW();
-            if (_PW.ShowDialog() == DialogResult.OK) {
-                PW = _PW.GetPW;
-            } else {
-                MessageBox.Show("中止しました。");
-                return false;
+            _PW.DialogResult = DialogResult.None;
+            while (_PW.DialogResult == DialogResult.None) {
+                if (_PW.ShowDialog() == DialogResult.OK) {
+                    PW = _PW.GetPW;
+                } else if (_PW.DialogResult == DialogResult.Cancel){
+                    MessageBox.Show("中止しました。");
+                    return false;
+                }
             }
             return true;
         }
@@ -202,11 +205,10 @@ namespace DownloadSyllabus2 {
         }
 
         private bool Download_and_Reference_Syllabus(DataRow row) {
-            //try {
+            try {
                 driver.SwitchTo().ParentFrame();
                 driver.SwitchTo().Frame("body");
-                //IWebElement SyllabusTable = driver.FindElementByCssSelector("table.normal");
-                //ReadOnlyCollection <IWebElement> SyllabusRows = driver.FindElementByCssSelector("table.normal").FindElements(By.TagName("tr"));
+                
                 string WeekTime = "";
                 string ClassName = "";
                 string Teacher = "";
@@ -216,11 +218,7 @@ namespace DownloadSyllabus2 {
                         Goto_SearchPage();
                     Search_Syllabus(row);
                     }
-                    //ReadOnlyCollection<IWebElement> SyllabusRowItems = SyllabusRow.FindElements(By.TagName("td"));
-                    //WeekTime = SyllabusRowItems[3].Text;
-                    //ClassName = SyllabusRowItems[5].Text;
-                    //Teacher = SyllabusRowItems[6].Text;
-                    //SyllabusRowItems[7].FindElement(By.TagName("input")).Click();
+                    
                     WeekTime = driver.FindElement(By.XPath($"/html/body/table[2]/tbody/tr[{i}]/td[4]")).Text;
                     ClassName = driver.FindElement(By.XPath($"/html/body/table[2]/tbody/tr[{i}]/td[6]")).Text;
                     Teacher = driver.FindElement(By.XPath($"/html/body/table[2]/tbody/tr[{i}]/td[7]")).Text;
@@ -230,7 +228,6 @@ namespace DownloadSyllabus2 {
                     driver.SwitchTo().Frame("body");
 
                     driver.FindElementByCssSelector("body > p:nth-child(13) > input[type=submit]").Click();
-                    //driver.FindElementById("open-button").Click();
 
                     System.Threading.Thread.Sleep(500);
                     string downloadFile = "";
@@ -249,23 +246,21 @@ namespace DownloadSyllabus2 {
                         downloadFile = $"{folderPath}\\syllabusPdfList.pdf";
                     }
                     FileSystem.RenameFile(downloadFile, $"{WeekTime}_{ClassName}_{Teacher}.pdf");
-                    //driver.Navigate().Back();
-                    //driver.Navigate().Back();
                     
                 }
-            //} catch (NoSuchElementException e) {
-            //    MessageBox.Show($"シラバス参照に失敗しました。\n{e.Message}");
-            //    return false;
-            //} catch (NoSuchFrameException e) {
-            //    MessageBox.Show($"メニューバーまたはメインフレームへの移動に失敗しました。\n{e.Message}");
-            //    return false;
-            //} catch (IOException e) {
-            //    MessageBox.Show($"ファイル操作に失敗しました。\npdfファイルが開かれていないか確認してください。\n{e.Message}");
-            //    return false;
-            //} catch (Exception e) {
-            //    MessageBox.Show($"不明なエラーです。\n{e.Message}");
-            //    return false;
-            //}
+            } catch (NoSuchElementException e) {
+                MessageBox.Show($"シラバス参照に失敗しました。\n{e.Message}");
+                return false;
+            } catch (NoSuchFrameException e) {
+                MessageBox.Show($"メニューバーまたはメインフレームへの移動に失敗しました。\n{e.Message}");
+                return false;
+            } catch (IOException e) {
+                MessageBox.Show($"ファイル操作に失敗しました。\npdfファイルが開かれていないか確認してください。\n{e.Message}");
+                return false;
+            } catch (Exception e) {
+                MessageBox.Show($"不明なエラーです。\n{e.Message}");
+                return false;
+            }
             return true;
         }
 

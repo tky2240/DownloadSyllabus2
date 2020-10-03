@@ -9,45 +9,45 @@ namespace DownloadSyllabus2 {
     public static class Globals {
 
         public static Dictionary<string, string> Weeks = new Dictionary<string, string>{
-            ["指示なし"] = "selected",
-            ["月曜日"] = "1",
-            ["火曜日"] = "2",
-            ["水曜日"] = "3",
-            ["木曜日"] = "4",
-            ["金曜日"] = "5",
-            ["土曜日"] = "6",
-            ["その他"] = "9",
+            ["selected"] = "指示なし",
+            ["1"] = "月曜日",
+            ["2"] = "火曜日",
+            ["3"] = "水曜日",
+            ["4"] = "木曜日",
+            ["5"] = "金曜日",
+            ["6"] = "土曜日",
+            ["9"] = "その他",
         };
 
         public static Dictionary<string, string> Times = new Dictionary<string, string>
         {
-            ["指示なし"] = "selected",
-            ["1限"] = "1",
-            ["2限"] = "2",
-            ["3限"] = "3",
-            ["4限"] = "4",
-            ["5限"] = "5",
-            ["6限"] = "6",
-            ["7限"] = "7",
-            ["その他"] = "0",
+            ["selected"] = "指示なし",
+            ["1"] = "1限",
+            ["2"] = "2限",
+            ["3"] = "3限",
+            ["4"] = "4限",
+            ["5"] = "5限",
+            ["6"] = "6限",
+            ["7"] = "7限",
+            ["0"] = "その他",
         };
 
         public static Dictionary<string, string> Semesters = new Dictionary<string, string>
         {
-            ["指示なし"] = "",
-            ["前学期"] = "1",
-            ["後学期"] = "2",
+            [""] = "指示なし",
+            ["1"] = "前学期",
+            ["2"] = "後学期",
         };
 
         public static Dictionary<string, string> Years = new Dictionary<string, string>
         {
-            ["指示なし"] = "selected",
-            ["1年"] = "1",
-            ["2年"] = "2",
-            ["3年"] = "3",
-            ["4年"] = "4",
-            ["5年"] = "5",
-            ["6年"] = "6",
+            ["selected"] = "指示なし",
+            ["1"] = "1年",
+            ["2"] = "2年",
+            ["3"] = "3年",
+            ["4"] = "4年",
+            ["5"] = "5年",
+            ["6"] = "6年",
         };
 
         public static string[] WeekName = new string[Weeks.Keys.Count];

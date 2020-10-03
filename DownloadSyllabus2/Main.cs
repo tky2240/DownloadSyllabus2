@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
@@ -75,8 +76,8 @@ namespace DownloadSyllabus2 {
 
         private void SetDataSource_Combobox_Columns(DataGridViewComboBoxColumn col, Dictionary<string,string> src) {
             col.DataSource = src.ToList();
-            col.DisplayMember = "key";
-            col.ValueMember = "value";
+            col.DisplayMember = "value";
+            col.ValueMember = "key";
             col.SortMode = DataGridViewColumnSortMode.Automatic;
             col.DisplayStyle = DataGridViewComboBoxDisplayStyle.DropDownButton;
             col.FlatStyle = FlatStyle.Flat;
@@ -251,6 +252,12 @@ namespace DownloadSyllabus2 {
                     return;
                 }
             }
+            if(folderPath == "") {
+                if (!Open_Folder()) {
+                    MessageBox.Show("中止しました。");
+                    return;
+                }
+            }
             ConnectSyllabus connect = new ConnectSyllabus();
             if (connect.Start_Download(Load_csv())) {
                 MessageBox.Show("正常に終了しました。");
@@ -263,14 +270,38 @@ namespace DownloadSyllabus2 {
         }
 
         private void dgv_class_CellContentClick(object sender, DataGridViewCellEventArgs e) {
-            if(dgv_class.Columns[e.ColumnIndex].Name == "show") {
-                if(e.RowIndex != dgv_class.Rows.Count - 1) {
+            if(dgv_class.Columns[e.ColumnIndex].Name == "Show") {
+                if(e.RowIndex != dgv_class.Rows.Count - 1 && e.RowIndex != -1) {
                     try {
-                        //ここに開く処理
-                        //System.Diagnostics.Process p = System.Diagnostics.Process.Start("pdfのパス");
+                        string time = Times[dgv_class.Rows[e.RowIndex].Cells["Time"].Value.ToString()];
+                        if (time == "指示なし") {
+                            time = "";
+                        }else if(time != "その他") {
+                            time = time.Substring(0, 1);
+                        }
+                        string week = Weeks[dgv_class.Rows[e.RowIndex].Cells["Week"].Value.ToString()];
+                        if (week == "指示なし") {
+                            week = "";
+                        } else if (week != "その他") {
+                            week = week.Substring(0, 1);
+                        }
+                        string classname = dgv_class.Rows[e.RowIndex].Cells["ClassName"].Value.ToString();
+                        string teacher = dgv_class.Rows[e.RowIndex].Cells["Teacher"].Value.ToString();
+                        string[] files = Directory.GetFiles(folderPath, "*.pdf", System.IO.SearchOption.TopDirectoryOnly);
+                        foreach(string file in files) {
+                            if (time == "その他" || week == "その他") {
+                                if (Regex.IsMatch(Path.GetFileName(file), $"^他_.*{classname}.*_,*{teacher}.*\\.pdf")) {
+                                    System.Diagnostics.Process p = System.Diagnostics.Process.Start(file);
+                                }
+                            } else {
+                                if (Regex.IsMatch(Path.GetFileName(file), $"^{week}{time}_.*{classname}.*_,*{teacher}.*\\.pdf")) {
+                                    System.Diagnostics.Process p = System.Diagnostics.Process.Start(file);
+                                }
+                            }   
+                        }
                     } catch {
-                        MessageBox.Show("ファイルが見つかりません。保存フォルダ内にPDFがあるか確認してください。");
-                    }
+                    MessageBox.Show("ファイルが見つかりません。保存フォルダ内にPDFがあるか確認してください。");
+                    }   
                 }
             }
         }
