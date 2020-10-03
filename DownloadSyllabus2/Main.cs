@@ -125,9 +125,13 @@ namespace DownloadSyllabus2 {
             parser.Delimiters = new string[] { "," };
             parser.HasFieldsEnclosedInQuotes = true;
             parser.TrimWhiteSpace = true;
-
-            while (!parser.EndOfData) {
-                csvTable.Rows.Add(parser.ReadFields());
+            try {
+                while (!parser.EndOfData) {
+                    csvTable.Rows.Add(parser.ReadFields());
+                }
+            } catch (MalformedLineException e) {
+                MessageBox.Show($"CSV読み込みエラーです。\n{e.Message}");
+                return csvTable;
             }
             parser.Close();
 
@@ -246,7 +250,12 @@ namespace DownloadSyllabus2 {
                     MessageBox.Show("中止しました。");
                     return;
                 }
-                //Connect_Syllabus();
+            }
+            ConnectSyllabus connect = new ConnectSyllabus();
+            if (connect.Start_Download(Load_csv())) {
+                MessageBox.Show("正常に終了しました。");
+            } else {
+                MessageBox.Show("正常に終了しませんでした。");
             }
         }
         private void cmd_exit_Click(object sender, EventArgs e) {
