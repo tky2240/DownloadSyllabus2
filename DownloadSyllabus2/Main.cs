@@ -26,7 +26,6 @@ namespace DownloadSyllabus2 {
         private void Main_Load(object sender, EventArgs e){
             if (!Load_ini()){
                 MessageBox.Show("iniの読み込みに失敗しました。");
-                return;
             }
 
             dgv_class.DataSource = Load_csv();
