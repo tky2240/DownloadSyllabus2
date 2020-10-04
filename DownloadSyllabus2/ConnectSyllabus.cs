@@ -242,6 +242,12 @@ namespace DownloadSyllabus2 {
                 string ClassName = "";
                 string Teacher = "";
                 int rowCount = driver.FindElement(By.XPath($"/html/body/table[2]/tbody")).FindElements(By.TagName("tr")).Count;
+                if(rowCount > 10) {
+                    if(MessageBox.Show("10以上の検索結果が見つかりました。\n全てダウンロードしますか？","確認",MessageBoxButtons.YesNo,MessageBoxIcon.Question) != DialogResult.Yes) {
+                        MessageBox.Show($"スキップしました。\n{string.Join(", ", row.ItemArray)}");
+                        return true;
+                    }
+                }
                 for (int i = 1; i <= rowCount; i++) {
                     if(i > 1) {
                         Goto_SearchPage();
