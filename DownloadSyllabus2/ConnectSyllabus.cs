@@ -25,51 +25,80 @@ namespace DownloadSyllabus2 {
         ForwardedPortDynamic portDynamic;
 
         public bool Start_Download(DataTable csvTable) {
+
+            Progress progress = new Progress();
+            progress.Set_Max = csvTable.Rows.Count + 6;
+            progress.Show();
+
+            progress.Set_Text = "アカウント情報を取得しています...";
+            progress.Add_ProgressBar();
             if (!Input_Account()) {
+                progress.Quit();
                 return false;
             }
+
+            progress.Set_Text = "SSH接続を試行しています...";
+            progress.Add_ProgressBar();
             if (!Connect_SSH()) {
                 portDynamic.Stop();
                 portDynamic.Dispose();
                 sshClient.Disconnect();
                 sshClient.Dispose();
+                progress.Quit();
                 return false;
             }
 
+            progress.Set_Text = "Chromeの準備をしています...";
+            progress.Add_ProgressBar();
             ChromeOptions options = Set_Options();
             driver = new ChromeDriver(options);
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
 
+            progress.Set_Text = "UEC統合認証中...";
+            progress.Add_ProgressBar();
             if (!UEC_Authorization()) {
                 Terminate_Chrome();
+                progress.Quit();
                 return false;
             }
 
+            progress.Set_Text = "シラバス検索ページへ遷移中...";
+            progress.Add_ProgressBar();
             if (!Goto_SearchPage()) {
                 Terminate_Chrome();
+                progress.Quit();
                 return false;
             }
             foreach(DataRow row in csvTable.Rows) {
+                progress.Set_Text = $"{string.Join(",", row.ItemArray)}を取得中...";
+                progress.Add_ProgressBar();
                 if (!Search_Syllabus(row)) {
-                    MessageBox.Show($"次の行のシラバス取得に失敗しました。項目を見直してください。\n{row.ItemArray.ToString()}");
+                    MessageBox.Show($"次の行のシラバス取得に失敗しました。項目を見直してください。\n{string.Join(",", row.ItemArray)}");
                     if (!Goto_SearchPage()) {
                         Terminate_Chrome();
+                        progress.Quit();
                         return false;
                     }
+                    continue;
                 }
                 if (!Download_and_Reference_Syllabus(row)) {
-                    MessageBox.Show($"次の行のシラバス取得に失敗しました。項目を見直してください。\n{row.ItemArray.ToString()}");
+                    MessageBox.Show($"次の行のシラバス取得に失敗しました。項目を見直してください。\n{string.Join(",", row.ItemArray)}");
                     if (!Goto_SearchPage()) {
                         Terminate_Chrome();
+                        progress.Quit();
                         return false;
                     }
                 }
                 if (!Goto_SearchPage()) {
                     Terminate_Chrome();
+                    progress.Quit();
                     return false;
                 }
             }
+            progress.Set_Text = "Chromeの終了処理中...";
+            progress.Add_ProgressBar();
             Terminate_Chrome();
+            progress.Quit();
             return true;
         }
 
