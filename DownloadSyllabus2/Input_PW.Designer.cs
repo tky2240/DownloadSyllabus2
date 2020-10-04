@@ -69,6 +69,7 @@
             // 
             this.txt_input.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txt_input.Font = new System.Drawing.Font("Meiryo UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.txt_input.ImeMode = System.Windows.Forms.ImeMode.Disable;
             this.txt_input.Location = new System.Drawing.Point(16, 43);
             this.txt_input.Name = "txt_input";
             this.txt_input.PasswordChar = '*';

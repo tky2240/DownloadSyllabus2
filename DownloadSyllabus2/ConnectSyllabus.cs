@@ -251,7 +251,7 @@ namespace DownloadSyllabus2 {
                 for (int i = 1; i <= rowCount; i++) {
                     if(i > 1) {
                         Goto_SearchPage();
-                    Search_Syllabus(row);
+                        Search_Syllabus(row);
                     }
                     
                     WeekTime = driver.FindElement(By.XPath($"/html/body/table[2]/tbody/tr[{i}]/td[4]")).Text;
