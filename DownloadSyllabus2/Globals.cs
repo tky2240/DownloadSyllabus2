@@ -9,7 +9,7 @@ namespace DownloadSyllabus2 {
     public static class Globals {
 
         public static Dictionary<string, string> Weeks = new Dictionary<string, string>{
-            ["selected"] = "指示なし",
+            [""] = "指示なし",
             ["1"] = "月曜日",
             ["2"] = "火曜日",
             ["3"] = "水曜日",
@@ -21,7 +21,7 @@ namespace DownloadSyllabus2 {
 
         public static Dictionary<string, string> Times = new Dictionary<string, string>
         {
-            ["selected"] = "指示なし",
+            [""] = "指示なし",
             ["1"] = "1限",
             ["2"] = "2限",
             ["3"] = "3限",
@@ -41,7 +41,7 @@ namespace DownloadSyllabus2 {
 
         public static Dictionary<string, string> Years = new Dictionary<string, string>
         {
-            ["selected"] = "指示なし",
+            [""] = "指示なし",
             ["1"] = "1年",
             ["2"] = "2年",
             ["3"] = "3年",
