@@ -59,7 +59,6 @@ namespace DownloadSyllabus2 {
                 } else {
                     lab_folderPath.Text = folderPath;
                 }
-                folderPath = lpReturnedString.ToString().Trim();
             } else {
                 return false;
             }
